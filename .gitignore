@@ -1,0 +1,6 @@
+build/
+*.exe
+*.dll
+*.qmlc
+.vscode/
+.DS_Store

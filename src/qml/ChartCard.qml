@@ -2,12 +2,9 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-// Placeholder for real QtCharts later
 Rectangle {
     id: chartCard
-    property string title: ""Chart""
-    property string subtitle: ""Data visualization""
-
+    property string title: ""System Metrics""
     color: theme.surface
     radius: 12
     border.color: theme.isDark ? ""#333333"" : ""#e9ecef""
@@ -15,32 +12,50 @@ Rectangle {
 
     ColumnLayout {
         anchors.centerIn: parent
-        spacing: 8
+        spacing: 12
 
         Text {
-            text: chartCard.title
+            text: title
             font.bold: true
             color: theme.textPrimary
             Layout.alignment: Qt.AlignHCenter
         }
 
+        // Live time
         Text {
-            text: chartCard.subtitle
+            text: ""?? "" + dataModel.currentTime
             color: theme.textSecondary
-            font.pixelSize: 12
+            font.pixelSize: 14
             Layout.alignment: Qt.AlignHCenter
         }
 
-        Rectangle {
-            width: 200; height: 100
-            color: theme.isDark ? ""#2a2a2a"" : ""#f0f0f0""
-            radius: 6
-
+        // CPU Usage
+        RowLayout {
+            spacing: 8
+            Layout.alignment: Qt.AlignHCenter
             Text {
-                anchors.centerIn: parent
-                text: ""??""
-                font.pixelSize: 24
+                text: ""CPU:""
+                color: theme.textPrimary
+                font.bold: true
+            }
+            Text {
+                text: dataModel.cpuUsage + ""%""
                 color: theme.primary
+            }
+        }
+
+        // Memory Usage
+        RowLayout {
+            spacing: 8
+            Layout.alignment: Qt.AlignHCenter
+            Text {
+                text: ""Memory:""
+                color: theme.textPrimary
+                font.bold: true
+            }
+            Text {
+                text: dataModel.memoryUsage + ""%""
+                color: theme.success
             }
         }
     }

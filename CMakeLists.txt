@@ -7,7 +7,8 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Quick)
+# Find Qt6 components (including Charts)
+find_package(Qt6 REQUIRED COMPONENTS Core Quick Charts)
 
 qt_standard_project_setup()
 
@@ -17,5 +18,5 @@ add_executable(QtDashboardTemplate
     src/qml/main.qml
 )
 
-target_link_libraries(QtDashboardTemplate PRIVATE Qt6::Core Qt6::Quick)
+target_link_libraries(QtDashboardTemplate PRIVATE Qt6::Core Qt6::Quick Qt6::Charts)
 target_include_directories(QtDashboardTemplate PRIVATE src/backend)

@@ -50,31 +50,9 @@ ApplicationWindow {
         anchors.centerIn: parent
         spacing: 20
 
-        Rectangle {
-            width: 400; height: 200
-            color: theme.surface
-            radius: 12
-            border.color: theme.isDark ? ""#333333"" : ""#e9ecef""
-            border.width: 1
-
-            ColumnLayout {
-                anchors.centerIn: parent
-                spacing: 10
-
-                Text {
-                    text: ""?? Performance Chart""
-                    font.bold: true
-                    color: theme.textPrimary
-                    Layout.alignment: Qt.AlignHCenter
-                }
-
-                Text {
-                    text: ""(QtCharts integration coming soon)""
-                    color: theme.textSecondary
-                    font.pixelSize: 12
-                    Layout.alignment: Qt.AlignHCenter
-                }
-            }
+        ChartCard {
+            title: ""Performance Metrics""
+            subtitle: ""CPU, Memory, Network""
         }
 
         Label {

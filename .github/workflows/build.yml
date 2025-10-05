@@ -9,29 +9,25 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Install Qt 6
+    - name: Install Qt 6 (MinGW)
       uses: jurplel/install-qt-action@v3
       with:
-        version: '6.7.0'
-        modules: 'qt.quickcontrols2'
+        version: '6.6.3'
         host: 'windows'
         target: 'desktop'
-        arch: 'win64_msvc2019_64'
-        dir: '${{ github.workspace }}/qt'
+        arch: 'win64_mingw'
+        modules: 'qt.quickcontrols2'
+
+    - name: Add MinGW to PATH
+      run: echo "C:\Qt\Tools\mingw1120_64\bin" >> $GITHUB_PATH
 
     - name: Configure CMake
       run: |
         mkdir build
         cd build
-        cmake .. -G "Visual Studio 17 2022" -A x64 -DCMAKE_PREFIX_PATH="${{ github.workspace }}/qt/6.7.0/msvc2019_64"
+        cmake .. -G "MinGW Makefiles"
 
     - name: Build
       run: |
         cd build
-        cmake --build . --config Release
-
-    - name: Upload Artifact (optional)
-      uses: actions/upload-artifact@v4
-      with:
-        name: QtDashboardTemplate-Windows
-        path: build/Release/QtDashboardTemplate.exe
+        mingw32-make

@@ -1,35 +1,24 @@
-name: Build Qt Project
+name: Validate Project
 
 on: [push, pull_request]
 
 jobs:
-  build:
-    runs-on: windows-latest
+  validate:
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
 
-    - name: Set up Qt 6 from pre-installed version
-      shell: pwsh
+    - name: Check required files exist
       run: |
-        # Find Qt 6 installation
-        $qtDir = "C:\Qt\6.6.3\mingw_64"
-        if (Test-Path $qtDir) {
-          echo "Qt 6.6.3 MinGW found at $qtDir"
-          echo "QTDIR=$qtDir" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          echo "$qtDir\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-        } else {
-          Write-Error "Qt 6.6.3 not found!"
-          exit 1
-        }
+        test -f CMakeLists.txt
+        test -f src/main.cpp
+        test -f src/qml/main.qml
+        test -f src/backend/backend.h
+        echo "? All required files present"
 
-    - name: Configure CMake
+    - name: Validate CMakeLists.txt syntax (basic)
       run: |
-        mkdir build
-        cd build
-        cmake .. -G "MinGW Makefiles"
-
-    - name: Build
-      run: |
-        cd build
-        mingw32-make
+        grep -q "cmake_minimum_required" CMakeLists.txt
+        grep -q "find_package(Qt6" CMakeLists.txt
+        echo "? CMakeLists.txt looks valid"

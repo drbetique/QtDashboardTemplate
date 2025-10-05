@@ -9,7 +9,6 @@ ApplicationWindow {
     visible: true
     title: ""Qt Dashboard Template""
 
-    // Apply theme
     Theme { id: theme }
 
     background: Rectangle {
@@ -18,11 +17,32 @@ ApplicationWindow {
 
     header: ToolBar {
         background: Rectangle { color: theme.surface }
-        Label {
-            text: ""Dashboard""
-            font.pixelSize: 18
-            color: theme.textPrimary
-            padding: 10
+        RowLayout {
+            anchors.fill: parent
+            spacing: 10
+
+            Label {
+                text: ""Dashboard""
+                font.pixelSize: 18
+                color: theme.textPrimary
+                padding: 10
+            }
+
+            Item { Layout.fillWidth: true } // spacer
+
+            Switch {
+                id: darkModeSwitch
+                checked: theme.isDark
+                onCheckedChanged: theme.toggleDarkMode()
+                Layout.alignment: Qt.AlignVCenter
+            }
+
+            Label {
+                text: ""Dark Mode""
+                color: theme.textSecondary
+                font.pixelSize: 12
+                Layout.alignment: Qt.AlignVCenter
+            }
         }
     }
 
@@ -34,7 +54,7 @@ ApplicationWindow {
             width: 400; height: 200
             color: theme.surface
             radius: 12
-            border.color: ""#e9ecef""
+            border.color: theme.isDark ? ""#333333"" : ""#e9ecef""
             border.width: 1
 
             ColumnLayout {

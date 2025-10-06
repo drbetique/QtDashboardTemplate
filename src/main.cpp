@@ -1,23 +1,28 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include ""backend/backend.h""
-#include ""backend/DataModel.h""
+#include <QDir>
+#include <QFileInfo>
+#include "backend/WeatherModel.h"
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
-    Backend backend;
-    DataModel dataModel; // <-- new!
+    // Get path to main.qml
+    QString sourceDir = QFileInfo(__FILE__).absolutePath();
+    QString qmlPath = sourceDir + "/../src/qml/main.qml";
+
+    WeatherModel weatherModel;
 
     QQmlApplicationEngine engine;
-    engine.rootContext()->setContextProperty(""backend"", &backend);
-    engine.rootContext()->setContextProperty(""dataModel"", &dataModel); // <-- expose to QML
-    engine.loadFromModule(""QtDashboardTemplate"", ""Main"");
+    engine.rootContext()->setContextProperty("weatherModel", &weatherModel);
+    engine.load(QUrl::fromLocalFile(qmlPath));
 
-    if (engine.rootObjects().isEmpty())
+    if (engine.rootObjects().isEmpty()) {
+        qDebug() << "Failed to load QML:" << qmlPath;
         return -1;
+    }
 
     return app.exec();
 }

@@ -35,7 +35,7 @@ private slots:
 private:
     QString m_city = "Loading...";
     QString m_temperature = "--";
-    QString m_description = "—";
+    QString m_description = QStringLiteral("Loading...");
     QString m_icon = "01d";
     bool m_darkMode = false;
     QTimer m_timer;

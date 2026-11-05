@@ -4,3 +4,6 @@ build/
 *.qmlc
 .vscode/
 .DS_Store
+
+# Qt Creator
+CMakeLists.txt.user

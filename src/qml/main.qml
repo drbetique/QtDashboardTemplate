@@ -15,7 +15,7 @@ ApplicationWindow {
     }
 
     // Dynamic accent color based on weather
-    property string weatherMain: "01d" // default: clear sky
+    readonly property string weatherMain: weatherModel.icon // OpenWeatherMap icon code, e.g. "01d" = clear sky
     readonly property color accent: {
         if (weatherMain.startsWith("01")) return isNight ? "#FFD166" : "#FF9E00"; // Clear
         if (weatherMain.startsWith("02")) return isNight ? "#7209B7" : "#5E17EB"; // Few clouds
@@ -35,15 +35,12 @@ ApplicationWindow {
     }
 
     // Weather data
-    property string city: "Forssa"
-    property string temperature: "—"
-    property string description: "Loading..."
-    property string icon: "01d"
+    readonly property string city: weatherModel.city
+    readonly property string temperature: weatherModel.temperature
+    readonly property string description: weatherModel.description
+    readonly property string icon: weatherModel.icon
 
-    Component.onCompleted: {
-        fetchWeather()
-        timeTimer.start()
-    }
+    Component.onCompleted: timeTimer.start()
 
     property string currentTime: Qt.formatDateTime(new Date(), "h:mm:ss AP")
     property string currentDate: Qt.formatDateTime(new Date(), "dddd, MMMM d, yyyy")
@@ -58,26 +55,6 @@ ApplicationWindow {
         }
     }
 
-    function fetchWeather() {
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "https://api.openweathermap.org/data/2.5/weather?q=Forssa,FI&appid=YOUR_OPENWEATHER_API_KEY&units=metric");
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    var response = JSON.parse(xhr.responseText);
-                    city = response.name + ", " + response.sys.country;
-                    temperature = Math.round(response.main.temp) + "°C";
-                    description = response.weather[0].description;
-                    icon = response.weather[0].icon;
-                    weatherMain = icon; // Update accent color
-                } else {
-                    description = "Error loading weather";
-                }
-            }
-        };
-        xhr.send();
-    }
-
     header: ToolBar {
         background: Rectangle {
             color: isNight ? "#1e1e1e" : "#ffffff"
@@ -87,7 +64,7 @@ ApplicationWindow {
         RowLayout {
             anchors.fill: parent
             Label {
-                text: "🌤️ Forssa Weather Forcast"
+                text: "🌤️ Weather Dashboard"
                 font.pixelSize: 16
                 font.bold: true
                 color: accent
